@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import { Menu, Icon, Spin } from 'antd';
+import React, {Component} from 'react';
+import {Menu, Icon, Spin} from 'antd';
 import Link from 'umi/link';
-import { getMenu } from '../common/menu';
+import {getMenu} from '../common/menu';
+
 
 const SubMenu = Menu.SubMenu;
 
@@ -10,7 +11,7 @@ class Side extends Component {
     loading: false,
     menu: [],
   };
-  onSelect = ({ key }) => {
+  onSelect = ({key}) => {
     this.props.onSelect(key);
   };
   onOpenChange = (e) => {
@@ -18,13 +19,31 @@ class Side extends Component {
   };
 
   componentWillMount() {
-    this.setState({ loading: true });
+    this.setState({loading: true});
+
     if (sessionStorage.getItem('selectedKeys')) {
-      this.onSelect({ key: sessionStorage.getItem('selectedKeys') });
-      this.onOpenChange(['', sessionStorage.getItem('selectedKeys')[0]]);
+      this.onSelect({key: sessionStorage.getItem('selectedKeys')});
+
     }
     getMenu((res) => {
-      this.setState({ menu: res, loading: false });
+      const selectKey = sessionStorage.getItem('selectedKeys')
+      const recursive = (data, name) => {
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].children) {
+            recursive(data[i], data[i].name)
+          }
+          if (data[i].path === selectKey) {
+            this.onOpenChange(['', name]);
+          }
+        }
+      }
+
+      for (let i = 0; i < res.length; i++) {
+        if (res[i].children) {
+          recursive(res[i].children, res[i].name)
+        }
+      }
+      this.setState({menu: res, loading: false});
     });
   }
 
@@ -35,8 +54,8 @@ class Side extends Component {
   }
 
   render() {
-    const { openKeys, selectedKeys } = this.props;
-    const { menu, loading } = this.state;
+    const {openKeys, selectedKeys} = this.props;
+    const {menu, loading} = this.state;
     sessionStorage.setItem('selectedKeys', selectedKeys);
     return (
       <Spin spinning={loading} tip='菜 单 加 载 中 ...'>
@@ -47,7 +66,7 @@ class Side extends Component {
           theme="dark"
           openKeys={[openKeys]}
           selectedKeys={[selectedKeys]}
-          style={{ minHeight: 400 }}
+          style={{minHeight: 400}}
         >
           {
             menu && menu.map((item) => (

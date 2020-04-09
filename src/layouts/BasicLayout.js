@@ -50,7 +50,6 @@ class BasicLayout extends Component {
     });
   }
 
-
   toggleCollapsed = () => {
     const { global: { openKeys, collapsed } } = this.props;
     this.setState({ lastOpenKey: openKeys });
@@ -70,12 +69,14 @@ class BasicLayout extends Component {
       });
     }
   };
+
   onSelect = (data) => {
     this.props.dispatch({
       type: 'global/onselect',
       payload: data,
     });
   };
+
   onOpenChange = (data) => {
     this.props.dispatch({
       type: 'global/onopen',

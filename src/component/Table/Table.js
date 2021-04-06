@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Table, LocaleProvider } from 'antd';
-import zhCN from 'antd/lib/locale-provider/zh_CN';
+import { Table, ConfigProvider } from 'antd';
+// import zhCN from 'antd/lib/locale-provider/zh_CN';
+import zhCN from 'antd/lib/locale/zh_CN';
+import classNames from 'classnames';
+import styles from './table.less';
 
 export default class HehTable extends Component {
   constructor() {
@@ -10,8 +13,7 @@ export default class HehTable extends Component {
     };
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   onSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
@@ -22,15 +24,24 @@ export default class HehTable extends Component {
   };
 
   render() {
-    const { dataSource, columns, onShowSizeChange, pageChange, loading, size, bordered } = this.props;
+    const {
+      dataSource,
+      columns,
+      onShowSizeChange,
+      pageChange,
+      loading,
+      size,
+      bordered,
+    } = this.props;
     const rowSelection = {
       selectedRowKeys: this.state.selectedRowKeys,
       onChange: this.onSelectChange,
     };
+    const tableClassNames = classNames({ [styles.antTableWrapper]: true });
     return (
-      <LocaleProvider locale={zhCN}>
+      <ConfigProvider locale={zhCN}>
         <Table
-          style={{ background: '#FFF' }}
+          className={tableClassNames}
           size={size}
           bordered={bordered}
           dataSource={dataSource && dataSource.items}
@@ -46,12 +57,12 @@ export default class HehTable extends Component {
             showQuickJumper: true,
             style: { margin: 15 },
             size: 'default',
-            showTotal: (total => `共 ${total} 条`),
+            showTotal: (total) => `共 ${total} 条`,
           }}
           loading={loading}
-          rowKey='id'
+          rowKey="id"
         />
-      </LocaleProvider>
+      </ConfigProvider>
     );
   }
 }

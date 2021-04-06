@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Layout, Icon, Dropdown, Avatar, Menu, Spin } from 'antd';
-import router from 'umi/router';
+import { Layout, Dropdown, Avatar, Menu, Spin } from 'antd';
+import UserOutlined from '@ant-design/icons/UserOutlined';
+// import { history } from 'umi';
 import { connect } from 'dva';
 import RouterTabs from '../component/RouterTabs';
 import SideBar from './side';
 import styles from './index.css';
+import MenuUnfoldOutlined from '@ant-design/icons/MenuUnfoldOutlined';
+import MenuFoldOutlined from '@ant-design/icons/MenuFoldOutlined';
 
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, /* Footer, */ Sider, Content } = Layout;
 
 const UserMenu = (props) => {
   const handleMenuClick = ({ key }) => {
@@ -26,13 +29,14 @@ const UserMenu = (props) => {
   );
   return (
     <Dropdown overlay={menu}>
-      <Avatar className={styles.avatar} icon="user"/>
+      <Avatar className={styles.avatar} icon={<UserOutlined />} />
     </Dropdown>
   );
 };
 
 @connect(({ global, logoutToNamespace, loading }) => ({
-  global, logoutToNamespace,
+  global,
+  logoutToNamespace,
   logoutLoding: loading.effects['logoutToNamespace/platformLogout'],
 }))
 class BasicLayout extends Component {
@@ -51,7 +55,9 @@ class BasicLayout extends Component {
   }
 
   toggleCollapsed = () => {
-    const { global: { openKeys, collapsed } } = this.props;
+    const {
+      global: { openKeys, collapsed },
+    } = this.props;
     this.setState({ lastOpenKey: openKeys });
     this.props.dispatch({
       type: 'global/toggle',
@@ -85,16 +91,18 @@ class BasicLayout extends Component {
   };
 
   render() {
-    const { props, global: { openKeys, selectedKeys, collapsed }, logoutLoding } = this.props;
+    const {
+      props,
+      global: { openKeys, selectedKeys, collapsed },
+      logoutLoding,
+    } = this.props;
     return (
       <Spin spinning={!!logoutLoding} tip={'退出系统中,请稍等!'}>
         <Layout style={{ minHeight: '100vh' }}>
-          <Sider
-            width={256}
-            collapsed={collapsed}
-            collapsedWidth="0"
-          >
-            <div className={styles.logo}><h2>heh</h2></div>
+          <Sider width={256} collapsed={collapsed} collapsedWidth="0">
+            <div className={styles.logo}>
+              <h2>heh</h2>
+            </div>
             <SideBar
               collapsed={this.state.collapsed}
               onSelect={this.onSelect}
@@ -105,20 +113,20 @@ class BasicLayout extends Component {
           </Sider>
           <Layout>
             <Header style={{ background: '#FFF', padding: 0 }}>
-              <Icon
-                className={styles.trigger}
-                type={'menu-unfold'}
-                onClick={this.toggleCollapsed}
-              />
-              <UserMenu props={this.props}/>
+              {collapsed ? (
+                <MenuUnfoldOutlined className={styles.trigger} onClick={this.toggleCollapsed} />
+              ) : (
+                <MenuFoldOutlined className={styles.trigger} onClick={this.toggleCollapsed} />
+              )}
+              <UserMenu props={this.props} />
             </Header>
-            <Content >
-              <RouterTabs/>
+            <Content>
+              <RouterTabs />
               {props.children}
             </Content>
-            <Footer className={styles.footer}>
+            {/* <Footer className={styles.footer}>
               <h3>471867900@qq.com</h3>
-            </Footer>
+            </Footer> */}
           </Layout>
         </Layout>
       </Spin>
@@ -129,9 +137,3 @@ class BasicLayout extends Component {
 BasicLayout.propTypes = {};
 
 export default BasicLayout;
-
-
-
-
-
-

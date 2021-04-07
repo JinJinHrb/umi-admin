@@ -161,7 +161,6 @@ class Search extends Component {
         xl={8}
         md={12}
         xxl={6}
-        xl={12}
         key={item.key}
         style={{
           display: this.state.expand ? 'inline-block' : index + 1 > size ? 'none' : 'inline-block',

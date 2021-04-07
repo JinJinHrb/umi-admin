@@ -42,14 +42,15 @@ class Search extends Component {
               if (values[item.id]) {
                 const min_create_date = values[item.id][0].valueOf();
                 const max_create_date = values[item.id][1].valueOf();
-                values[item.id][0] = values[item.id][0].format(
+                /* values[item.id][0] = values[item.id][0].format(
                   item.format || 'YYYY-MM-DD HH:mm:ss'
                 );
                 values[item.id][1] = values[item.id][1].format(
                   item.format || 'YYYY-MM-DD HH:mm:ss'
-                );
-                values['min_create_date'] = min_create_date;
-                values['max_create_date'] = max_create_date;
+                ); */
+                delete values[item.id];
+                values[`min_${item.id}`] = min_create_date;
+                values[`max_${item.id}`] = max_create_date;
               }
               break;
             default:

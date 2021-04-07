@@ -32,7 +32,7 @@ class Index extends Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {}
 
-  componentWillUpdate(nextProps, nextState) {}
+  UNSAFE_componentWillUpdate(nextProps, nextState) {}
 
   componentDidUpdate(prevProps, prevState) {}
 
